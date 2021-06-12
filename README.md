@@ -2,7 +2,7 @@
 This was made using the PyGame library from python. It has an A* star algorithm and tilemap scrolling implementation.
 ### Language Used
 - Python
-### Dependency
+### External Dependency
 - PyGame library
 
 ### Screenshots
