@@ -1,53 +1,103 @@
-from player import Player
+from follower import Follower
 from camera import Camera
 from constants import *
 from grid import Grid
-import pygame, sys
+import pygame, random
 
+# Main class
 class Main:
-    def __init__(self, width, height):
-        pygame.init()
-        self.width, self.height = width, height
+
+    # Constructor
+    def __init__(self):
         self.setupGame()
         self.loop()
 
+    # Initialization method
     def setupGame(self):
+
+        # Declarations
+        pygame.init()
         self.running = True
         self.FPS = 120
-        self.screen = pygame.display.set_mode([self.width, self.height])
-        self.grid = Grid(self.screen, WINDOWSIZE, SCALE)
-        self.camera = Camera(self.grid, WINDOWSIZE)
+        self.screen = pygame.display.set_mode((800, 800))
+        self.scale = SCALE
+        self.windowSize = (800, 800)
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.scale = SCALE
+        # self.windowSize = (pygame.display.Info().current_w, \
+        #                    pygame.display.Info().current_h)
+        self.grid = Grid(self.screen, self.windowSize, self.scale)
+        self.camera = Camera(self.grid, self.windowSize)
         self.clock = pygame.time.Clock()
+        self.followers = pygame.sprite.Group()
 
-        self.sprites = pygame.sprite.Group()
-        self.player = Player(self.grid, self.camera, self.sprites)
-
+    # Loop method
     def loop(self):
+
+        # While variable self.running is True, run the loop
         while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-                    self.player.movement(event.key)
-                if event.type == pygame.KEYUP:
-                    self.player.stop()
-            self.update()
-            self.render()
+
+            # Set the frame rate
             self.clock.tick(self.FPS)
 
+            # Handles events
+            self.event()
+
+            # Handles updates
+            self.update()
+
+            # Handles rendering
+            self.render()
+
+    # Event handler
+    def event(self):
+
+        for event in pygame.event.get():
+
+            # If the window was closed, change the self.running to False,
+            # quit pygame, and exit console
+            if event.type == pygame.QUIT:
+                self.running = False
+
+            # If the keyboard was pressed
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+                
+                # If key R was press, then clear followers sprite group
+                if event.key == pygame.K_r:
+                    self.followers.empty()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Get the current position of the mouse relative to the position of the camera
+                mouse_POS = (self.camera.cameraRect[0]-pygame.mouse.get_pos()[0])*-1, \
+                            (self.camera.cameraRect[1]-pygame.mouse.get_pos()[1])*-1
+                
+                # Move units to mouse's position
+                if event.button == RIGHT_CLICK:
+                    paths = self.grid.nodes.requestPath([[follower.x, follower.y] for follower in self.followers], [mouse_POS[0], mouse_POS[1]])
+                    for i, follower in enumerate(self.followers):
+                        follower.path = paths[i]
+                
+                # Create follower
+                elif event.button == LEFT_CLICK:
+                    follower = Follower(ANIMIMAGES['FOLLOWER'], self.grid, self.camera, self.followers, [mouse_POS[0], mouse_POS[1]])
+
+    # Rendering method
     def render(self):
         self.screen.fill((0, 0, 0))
-        self.camera.renderView()
-        self.sprites.draw(self.screen)
+        self.grid.renderGrid()
+        self.followers.draw(self.screen)
 
+    # Update method
     def update(self):
-        self.grid.update()
-        self.sprites.update()
-        pygame.display.update()
+        self.camera.slide(pygame.mouse.get_pos(), pygame.mouse.get_focused())
+        self.grid.update(self.camera.cameraRect)
+        self.followers.update()
+        pygame.display.flip()
 
+# Run pygame
 if __name__=="__main__":
-    main = Main(*WINDOWSIZE)
+    main = Main()
+    pygame.quit()
