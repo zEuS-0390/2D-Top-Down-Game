@@ -19,13 +19,10 @@ class Main:
         pygame.init()
         self.running = True
         self.FPS = 120
-        self.screen = pygame.display.set_mode((800, 800))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.scale = SCALE
-        self.windowSize = (800, 800)
-        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        # self.scale = SCALE
-        # self.windowSize = (pygame.display.Info().current_w, \
-        #                    pygame.display.Info().current_h)
+        self.windowSize = (pygame.display.Info().current_w, \
+                           pygame.display.Info().current_h)
         self.grid = Grid(self.screen, self.windowSize, self.scale)
         self.camera = Camera(self.grid, self.windowSize)
         self.clock = pygame.time.Clock()
