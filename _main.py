@@ -4,6 +4,19 @@ from constants import *
 from grid import Grid
 import pygame
 
+""" *
+    * TITLE: Multiple Unit Pathfinding
+    *
+    * DESCRIPTION: 
+    *     This program is a simulation of how pathfinding works with an implementation
+    *     of A* algorithm. It can be used in many applications, such as games, AI, etc.
+    *     If you want to use this code into your project or you have some questions
+    *     regarding into this repository, just kindly email me. Thank you.
+    * 
+    * EMAIL: zeusjamesbaltazar@gmail.com
+    * CREATED BY: zEuS-0390 
+    *  """
+
 # Main class
 class Main:
 
