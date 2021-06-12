@@ -2,7 +2,7 @@ from follower import Follower
 from camera import Camera
 from constants import *
 from grid import Grid
-import pygame, random
+import pygame
 
 # Main class
 class Main:
