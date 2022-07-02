@@ -1,5 +1,5 @@
-# Multiple Units Pathfinding
-This was made using the PyGame library from python. It has an A* star algorithm and tilemap scrolling implementation.
+# A* Pathfinding with Multiple Units
+This was made using the PyGame library from Python. It has an A* star algorithm and tilemap scrolling implementation.
 ### Language Used
 - Python
 ### External Dependency
